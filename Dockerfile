@@ -17,11 +17,14 @@ RUN mkdir -p /usr/games /var/games/minecraft; \
 # Customize server settings
 ADD mineos.conf /usr/games/minecraft/mineos.conf
 RUN mkdir -p /etc/my_init.d
-RUN cp /usr/games/minecraft/init/mineos /etc/my_init.d/; \
-    chmod 744 /etc/my_init.d/mineos
+RUN cp /usr/games/minecraft/init/mineos /etc/init.d/; \
+    chmod 744 /etc/my_init.d/mineos; \
+    update-rc.d mineos defaults
 RUN cp /usr/games/minecraft/init/minecraft /etc/init.d/; \
-    chmod 744 /etc/init.d/minecraft
+    chmod 744 /etc/init.d/minecraft; \
+    update-rc.d minecraft defaults
 ADD supervisor_conf.d/sshd.sh /etc/my_init.d/sshd.sh
+ADD supervisor_conf.d/mineos.sh /etc/my_init.d/mineos.sh
 RUN mkdir /var/games/minecraft/ssl_certs; \
     mkdir /var/games/minecraft/log; \
     mkdir /var/games/minecraft/run; \
