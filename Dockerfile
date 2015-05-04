@@ -28,7 +28,6 @@ ADD supervisor_conf.d/mineos.sh /etc/my_init.d/mineos.sh
 RUN mkdir /var/games/minecraft/ssl_certs; \
     mkdir /var/games/minecraft/log; \
     mkdir /var/games/minecraft/run; \
-    mkdir /var/run/sshd
 
 # Add start script
 ADD start.sh /usr/games/minecraft/start.sh
