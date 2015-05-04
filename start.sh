@@ -23,8 +23,7 @@ fi
 # Changing password
 if [ ! -f $SCRIPTPATH/.initialized ]; then
     if [ "$PASSWORD" = "" ]; then
-        PASSWORD=`pwgen 10 1`
-        echo "Login password is \"$PASSWORD\""
+        PASSWORD=cr33p3r
     fi
     echo "$USER:$PASSWORD" | chpasswd
     sudo -u $USER touch $SCRIPTPATH/.initialized
@@ -37,25 +36,4 @@ if [ ! -f "$CERT_DIR/mineos.pem" ]; then
 fi
 
 # Starting minecraft servers
-sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH restore
-sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH start
-
-# Trap function
-_trap() {
-    kill $PID
-
-    # Wait for shutdown
-    ALIVE=1
-    while [ $ALIVE != 0 ]; do
-        ALIVE=`pgrep $PID | wc -l`
-        sleep 1
-    done
-
-    sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH stop
-}
-trap '_trap' 15
-
-# Starting Supervisor
-supervisord -c /etc/supervisor/supervisord.conf & PID=$!
-
-wait $PID
+service mineos start
