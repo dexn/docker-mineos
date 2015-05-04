@@ -36,4 +36,25 @@ if [ ! -f "$CERT_DIR/mineos.pem" ]; then
 fi
 
 # Starting minecraft servers
-service mineos start
+sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH restore
+sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH start
+
+# Trap function
+_trap() {
+    kill $PID
+
+    # Wait for shutdown
+    ALIVE=1
+    while [ $ALIVE != 0 ]; do
+        ALIVE=`pgrep $PID | wc -l`
+        sleep 1
+    done
+
+    sudo -u $USER python $SCRIPTPATH/$CONSOLE -d $DATAPATH stop
+}
+trap '_trap' 15
+
+# Starting Web UI
+sudo -u $USER python $SCRIPTPATH/$SERVER -c $CONFIGFILE & PID=$!
+
+wait $PID
