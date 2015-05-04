@@ -4,20 +4,23 @@ MAINTAINER DexN
 # Installing Dependencies
 RUN apt-get update; \
     apt-get -y install screen python-cherrypy3 rdiff-backup git openjdk-7-jre-headless; \
-    apt-get -y install openssh-server uuid pwgen
+    apt-get -y install openssh-server uuid
 
 # Installing MineOS scripts
 RUN mkdir -p /usr/games /var/games/minecraft; \
     git clone git://github.com/hexparrot/mineos /usr/games/minecraft; \
     cd /usr/games/minecraft; \
+    git config core.filemode false; \
     chmod +x server.py mineos_console.py generate-sslcert.sh; \
     ln -s /usr/games/minecraft/mineos_console.py /usr/local/bin/mineos
 
 # Customize server settings
 ADD mineos.conf /usr/games/minecraft/mineos.conf
 RUN mkdir -p /etc/my_init.d
-ADD logtime.sh /etc/my_init.d/logtime.sh
-ADD supervisor_conf.d/mineos.sh /etc/my_init.d/mineos.sh
+RUN cp /usr/games/minecraft/init/mineos /etc/my_init.d/; \
+    chmod 744 /etc/my_init.d/mineos
+RUN cp /usr/games/minecraft/init/minecraft /etc/init.d/; \
+    chmod 744 /etc/init.d/minecraft
 ADD supervisor_conf.d/sshd.sh /etc/my_init.d/sshd.sh
 RUN mkdir /var/games/minecraft/ssl_certs; \
     mkdir /var/games/minecraft/log; \
