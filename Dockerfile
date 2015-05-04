@@ -1,10 +1,6 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER DexN
 
-# Set enviroment
-ENV USER minecraft
-ENV PASSWORD cr33p3r
-
 # Installing Dependencies
 RUN apt-get update; \
     apt-get -y install screen python-cherrypy3 rdiff-backup git openjdk-7-jre-headless; \
@@ -31,10 +27,10 @@ ADD start.sh /usr/games/minecraft/start.sh
 RUN chmod +x /usr/games/minecraft/start.sh
 
 # Add minecraft user and change owner files.
-RUN useradd -s /bin/bash -d /usr/games/minecraft -m $USER -g minecraft; \
+RUN useradd -s /bin/bash -d /usr/games/minecraft -m minecraft; \
     usermod -G sudo minecraft; \
     sed -i 's/%sudo.*/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers; \
-    chown -R $USER:minecraft /usr/games/minecraft /var/games/minecraft
+    chown -R minecraft:minecraft /usr/games/minecraft /var/games/minecraft
 
 # Cleaning
 RUN apt-get clean
