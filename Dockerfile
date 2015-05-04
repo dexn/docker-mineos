@@ -15,8 +15,10 @@ RUN mkdir -p /usr/games /var/games/minecraft; \
 
 # Customize server settings
 ADD mineos.conf /usr/games/minecraft/mineos.conf
-ADD supervisor_conf.d/mineos.conf /etc/supervisor/conf.d/mineos.conf
-ADD supervisor_conf.d/sshd.conf /etc/supervisor/conf.d/sshd.conf
+RUN mkdir -p /etc/my_init.d
+ADD logtime.sh /etc/my_init.d/logtime.sh
+ADD supervisor_conf.d/mineos.sh /etc/my_init.d/mineos.sh
+ADD supervisor_conf.d/sshd.sh /etc/my_init.d/sshd.sh
 RUN mkdir /var/games/minecraft/ssl_certs; \
     mkdir /var/games/minecraft/log; \
     mkdir /var/games/minecraft/run; \
