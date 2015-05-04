@@ -1,5 +1,5 @@
-FROM dockerfile/supervisor
-MAINTAINER Yuji ODA
+FROM phusion/baseimage:0.9.11
+MAINTAINER DexN
 
 # Installing Dependencies
 RUN apt-get update; \
